@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎸 Guitar Practice Hub</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #040a14;
+            color: #e0e8f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ===== AURORA BACKGROUND ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -30%;
+            left: -30%;
+            width: 160%;
+            height: 160%;
+            background:
+                radial-gradient(ellipse at 25% 30%, rgba(46,204,113,0.06) 0%, transparent 40%),
+                radial-gradient(ellipse at 55% 20%, rgba(0,180,216,0.05) 0%, transparent 35%),
+                radial-gradient(ellipse at 70% 60%, rgba(255,215,0,0.04) 0%, transparent 45%),
+                radial-gradient(ellipse at 35% 75%, rgba(46,204,113,0.05) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 40%, rgba(0,180,216,0.04) 0%, transparent 35%),
+                radial-gradient(ellipse at 15% 55%, rgba(255,193,7,0.05) 0%, transparent 40%),
+                radial-gradient(ellipse at 60% 85%, rgba(46,204,113,0.04) 0%, transparent 45%),
+                radial-gradient(ellipse at 45% 10%, rgba(0,180,216,0.06) 0%, transparent 35%);
+            z-index: 0;
+            pointer-events: none;
+            animation: auroraDrift 25s ease-in-out infinite;
+        }
+
+        @keyframes auroraDrift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(3%, -2%) rotate(2deg); }
+            50% { transform: translate(-2%, 3%) rotate(-1deg); }
+            75% { transform: translate(-3%, -1%) rotate(1deg); }
+        }
+
+        @keyframes auroraDrift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(2%, -1%) rotate(1deg); }
+            50% { transform: translate(-1%, 2%) rotate(-1deg); }
+            75% { transform: translate(-2%, -2%) rotate(0.5deg); }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(255,215,0,0.3); }
+            50% { box-shadow: 0 0 20px rgba(255,215,0,0.5); }
+        }
+
+        @keyframes auroraBorder {
+            0% { border-color: #ffc107; box-shadow: 0 0 10px rgba(255,193,7,0.2); }
+            25% { border-color: #ffd700; box-shadow: 0 0 10px rgba(255,215,0,0.2); }
+            50% { border-color: #2ecc71; box-shadow: 0 0 10px rgba(46,204,113,0.2); }
+            75% { border-color: #00b4d8; box-shadow: 0 0 10px rgba(0,180,216,0.2); }
+            100% { border-color: #ffc107; box-shadow: 0 0 10px rgba(255,193,7,0.2); }
+        }
+        /* ===== FLOATING BACKGROUND EMOJIS ===== */
+        .bg-emoji {
+            position: fixed;
+            font-size: 50px;
+            opacity: 0.03;
+            pointer-events: none;
+            user-select: none;
+            z-index: 0;
+            animation: auroraFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes auroraFloat {
+            0%, 100% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); opacity: 0.02; }
+            20% { transform: translateY(-30px) translateX(20px) rotate(5deg) scale(1.3); opacity: 0.05; }
+            40% { transform: translateY(15px) translateX(-15px) rotate(-3deg) scale(0.9); opacity: 0.03; }
+            60% { transform: translateY(-20px) translateX(25px) rotate(7deg) scale(1.2); opacity: 0.04; }
+            80% { transform: translateY(10px) translateX(-20px) rotate(-5deg) scale(1.1); opacity: 0.03; }
+        }
+
+        /* Different colors for different emojis */
+        .bg-emoji.gold { color: #ffc107; }
+        .bg-emoji.green { color: #2ecc71; }
+        .bg-emoji.cyan { color: #00b4d8; }
+        .bg-emoji.yellow { color: #ffd700; }
+
+        @keyframes equalizer {
+            0%, 100% { height: 3px; }
+            50% { height: 14px; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== HEADER ===== */
+                header {
+            background: linear-gradient(180deg, #0a1525, #0f1f35);
+            padding: 18px 30px 12px;
+            text-align: center;
+            border-bottom: 2px solid #162040;
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        /* Floating background emojis */
+        .header-bg-emoji {
+            position: absolute;
+            font-size: 40px;
+            opacity: 0.04;
+            pointer-events: none;
+            user-select: none;
+            animation: floatEmoji 15s ease-in-out infinite;
+        }
+
+        @keyframes floatEmoji {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(5deg); }
+            50% { transform: translateY(5px) rotate(-3deg); }
+            75% { transform: translateY(-5px) rotate(2deg); }
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg,
+                #2ecc71, #ffc107, #00b4d8, #ffd700, #2ecc71);
+            animation: auroraBorder 6s linear infinite;
+        }
+
+                .header-top {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-center {
+            text-align: center;
+        }
+
+        .header-center a {
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .header-center a:hover h1 {
+            text-shadow: 0 0 25px rgba(255,215,0,0.4);
+        }
+
+        .header-center h1 {
+            font-size: 26px;
+            letter-spacing: 2px;
+            transition: 0.3s;
+            background: linear-gradient(135deg, #ffc107, #2ecc71, #00b4d8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+
+        .header-center p {
+            color: #7ec8e3;
+            font-size: 12px;
+            margin-top: 3px;
+            letter-spacing: 1px;
+        }
+
+            .equalizer-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .equalizer-wrapper::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg,
+                transparent, #ffc107, #2ecc71, #00b4d8, #2ecc71, #ffc107, transparent);
+            border-radius: 50%;
+            filter: blur(4px);
+            animation: auroraBorder 4s linear infinite;
+        }
+
+        .equalizer {
+            display: flex;
+            gap: 3px;
+            justify-content: center;
+            align-items: flex-end;
+            height: 40px;
+            margin-top: 10px;
+            padding: 5px 0;
+        }
+
+        .eq-bar {
+            width: 4px;
+            border-radius: 2px;
+            animation: equalizer 0.7s ease-in-out infinite;
+            box-shadow: 0 0 6px currentColor;
+        }
+        .eq-bar:nth-child(1) { background: #ffc107; animation-delay: 0s; height: 20px; }
+        .eq-bar:nth-child(2) { background: #ffd700; animation-delay: 0.05s; height: 28px; }
+        .eq-bar:nth-child(3) { background: #2ecc71; animation-delay: 0.1s; height: 16px; }
+        .eq-bar:nth-child(4) { background: #00e676; animation-delay: 0.15s; height: 35px; }
+        .eq-bar:nth-child(5) { background: #00b4d8; animation-delay: 0.2s; height: 22px; }
+        .eq-bar:nth-child(6) { background: #7ec8e3; animation-delay: 0.25s; height: 30px; }
+        .eq-bar:nth-child(7) { background: #ffc107; animation-delay: 0.3s; height: 18px; }
+        .eq-bar:nth-child(8) { background: #2ecc71; animation-delay: 0.35s; height: 33px; }
+        .eq-bar:nth-child(9) { background: #00b4d8; animation-delay: 0.4s; height: 15px; }
+        .eq-bar:nth-child(10) { background: #ffd700; animation-delay: 0.45s; height: 25px; }
+        .eq-bar:nth-child(11) { background: #00e676; animation-delay: 0.5s; height: 38px; }
+        .eq-bar:nth-child(12) { background: #7ec8e3; animation-delay: 0.55s; height: 20px; }
+        .eq-bar:nth-child(13) { background: #ffc107; animation-delay: 0.6s; height: 28px; }
+        .eq-bar:nth-child(14) { background: #2ecc71; animation-delay: 0.65s; height: 32px; }
+        .eq-bar:nth-child(15) { background: #00b4d8; animation-delay: 0.7s; height: 17px; }
+        .eq-bar:nth-child(16) { background: #ffd700; animation-delay: 0.75s; height: 26px; }
+        /* ===== ACCOUNT AREA ===== */
+        .account-area { position: relative; cursor: pointer; z-index: 10; }
+        .account-icon {
+            width: 42px; height: 42px; border-radius: 50%;
+            background: linear-gradient(135deg, #ffc107, #2ecc71);
+            color: #060d1a; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 18px; border: 2px solid #ffd700;
+            transition: 0.3s; animation: glowPulse 2s ease-in-out infinite;
+        }
+        .account-icon:hover {
+            border-color: #2ecc71;
+            box-shadow: 0 0 20px rgba(46,204,113,0.5);
+        }
+        .account-nickname {
+            color: #ffc107; font-size: 10px; margin-top: 3px;
+            text-align: center; max-width: 55px; overflow: hidden;
+            text-overflow: ellipsis; white-space: nowrap;
+        }
+        .account-dropdown {
+            display: none; position: absolute; right: 0; top: 62px;
+            background: linear-gradient(145deg, #0a1525, #0f1f35);
+            border: 2px solid #ffc107; border-radius: 12px; padding: 10px 0;
+            min-width: 150px; z-index: 200; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .account-dropdown.show { display: block; animation: fadeIn 0.2s ease; }
+        .account-dropdown a {
+            display: block; color: #ffc107; text-decoration: none;
+            padding: 10px 20px; font-size: 13px; transition: 0.3s;
+        }
+        .account-dropdown a:hover { background-color: #162040; color: #2ecc71; }
+        .account-dropdown .divider { border-top: 1px solid #162040; margin: 5px 0; }
+        .icon-picker { display: flex; gap: 6px; padding: 8px 15px; flex-wrap: wrap; }
+        .icon-option {
+            width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+            font-size: 15px; display: flex; align-items: center; justify-content: center;
+            border: 2px solid transparent; transition: 0.3s; background: #162040;
+        }
+        .icon-option:hover { border-color: #2ecc71; transform: scale(1.15); }
+        .icon-option.selected { border-color: #2ecc71; background: #1a3a2a; }
+
+        /* ===== SIDE MENU ===== */
+        .side-menu {
+            position: fixed; right: -185px; top: 0; width: 220px; height: 100%;
+            background: linear-gradient(180deg, #0a1525, #0f1f35);
+            border-left: 2px solid #ffc107; padding-top: 20px;
+            transition: 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); z-index: 100;
+        }
+        .side-menu.open { right: 0; }
+        .side-menu .menu-tab {
+            position: absolute; left: -35px; top: 50%; transform: translateY(-50%);
+            background: linear-gradient(135deg, #2ecc71, #00b4d8);
+            color: #060d1a; padding: 10px 6px; cursor: pointer;
+            font-weight: bold; font-size: 12px; letter-spacing: 1px;
+            border: none; border-radius: 8px 0 0 8px; transition: 0.3s;
+            width: 32px; height: 80px; display: flex; align-items: center;
+            justify-content: center; text-align: center; line-height: 1.2;
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+        .side-menu .menu-tab:hover {
+            background: linear-gradient(135deg, #00e676, #7ec8e3);
+            box-shadow: 0 0 20px rgba(46,204,113,0.5);
+        }
+        .side-menu .menu-content { padding-top: 40px; }
+        .side-menu .menu-content a {
+            display: block; color: #ffc107; text-decoration: none;
+            padding: 12px 20px; font-size: 15px; transition: 0.3s;
+            border-left: 3px solid transparent;
+        }
+        .side-menu .menu-content a:hover {
+            background-color: #162040; color: #2ecc71;
+            border-left: 3px solid #2ecc71; padding-left: 25px;
+        }
+        .side-menu .menu-content a.active {
+            background-color: #162040; color: #2ecc71;
+            border-left: 3px solid #2ecc71;
+        }
+
+        /* ===== MAIN LAYOUT ===== */
+        .main-wrapper {
+            display: flex;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+            min-height: calc(100vh - 180px);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== LEFT PANEL ===== */
+        .left-panel {
+            width: 16%;
+            min-width: 160px;
+            background: linear-gradient(180deg, #0a1525, #0f1f35);
+            border: 1px solid #162040;
+            border-radius: 16px;
+            padding: 20px 15px;
+            box-shadow:
+                4px 0 25px rgba(0,0,0,0.4),
+                inset -2px 0 15px rgba(46,204,113,0.02);
+            position: relative;
+        }
+
+        .left-panel::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 10%;
+            height: 80%;
+            width: 1px;
+            background: linear-gradient(180deg,
+                transparent, rgba(46,204,113,0.25),
+                rgba(255,215,0,0.25),
+                rgba(0,180,216,0.25),
+                transparent);
+        }
+
+        .left-panel .panel-label {
+            color: #2ecc71;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        /* ===== CENTER PANEL ===== */
+        .center-panel {
+            flex: 1;
+            background: linear-gradient(180deg, #0a1525, #0f1f35);
+            border: 1px solid #162040;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow:
+                0 0 40px rgba(0,0,0,0.5),
+                0 0 80px rgba(46,204,113,0.02);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section { margin-bottom: 35px; }
+
+        .section h2 {
+            color: #ffc107;
+            border-bottom: 2px solid #162040;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+
+        .song-grid { display: flex; flex-wrap: wrap; gap: 18px; }
+
+        .song-card {
+            background: linear-gradient(145deg, #0d1f35, #122840);
+            border: 2px solid #162040;
+            border-radius: 12px;
+            padding: 18px;
+            width: 230px;
+            transition: 0.4s;
+            position: relative;
+        }
+
+        .song-card:hover {
+            animation: auroraBorder 6s linear infinite;
+            transform: translateY(-3px);
+        }
+
+        .song-card.learned-card { opacity: 0.5; border-color: #1a3a2a; }
+        .song-card h3 { color: #ffc107; font-size: 18px; }
+        .song-card .artist { color: #7ec8e3; font-size: 13px; margin-top: 4px; }
+        .song-card .chords { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+
+        .chord-tag {
+            background-color: #162040;
+            color: #ffc107;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            transition: 0.3s;
+            border: 1px solid #2ecc71;
+        }
+
+        .chord-tag:hover { background-color: #2ecc71; color: #060d1a; border-color: #00e676; }
+
+        .chord-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #060d1a;
+            border: 2px solid #2ecc71;
+            border-radius: 10px;
+            padding: 12px;
+            z-index: 1000;
+            white-space: nowrap;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+        }
+
+        .chord-tag:hover .chord-tooltip { display: block; }
+
+        .chord-diagram {
+            font-family: 'Courier New', monospace;
+            color: #ffc107;
+            font-size: 11px;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .chord-name-tip { color: #2ecc71; font-weight: bold; text-align: center; margin-bottom: 5px; font-size: 14px; }
+
+        .btn-group { display: flex; gap: 8px; margin-top: 15px; }
+
+        .learn-btn {
+            background: linear-gradient(135deg, #ffc107, #ffd700);
+            color: #060d1a;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            flex: 1;
+            transition: 0.3s;
+            font-size: 13px;
+        }
+
+        .learn-btn:hover {
+            background: linear-gradient(135deg, #ffd700, #ffdf00);
+            box-shadow: 0 2px 15px rgba(255,193,7,0.3);
+        }
+
+        .learn-btn.learned { background: #1a3a2a; color: #2ecc71; }
+
+        .practice-btn {
+            background: transparent;
+            color: #7ec8e3;
+            border: 2px solid #162040;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            flex: 1;
+            transition: 0.3s;
+            font-size: 13px;
+        }
+
+        .practice-btn:hover {
+            background: #162040;
+            color: #2ecc71;
+            border-color: #2ecc71;
+        }
+
+        .practice-btn.active {
+            background: linear-gradient(135deg, #2ecc71, #00b4d8);
+            color: #060d1a;
+            border-color: #2ecc71;
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        /* ===== RIGHT PANEL ===== */
+        .right-panel {
+            width: 16%;
+            min-width: 160px;
+            background: linear-gradient(180deg, #0a1525, #0f1f35);
+            border: 1px solid #162040;
+            border-radius: 16px;
+            padding: 20px 15px;
+            box-shadow:
+                -4px 0 25px rgba(0,0,0,0.4),
+                inset 2px 0 15px rgba(0,180,216,0.02);
+            position: relative;
+        }
+
+        .right-panel::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10%;
+            height: 80%;
+            width: 1px;
+            background: linear-gradient(180deg,
+                transparent, rgba(0,180,216,0.25),
+                rgba(46,204,113,0.25),
+                rgba(255,215,0,0.25),
+                transparent);
+        }
+
+        .right-panel .panel-label {
+            color: #00b4d8;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background-color: #0a1525;
+            color: #7ec8e3;
+            text-align: center;
+            padding: 15px;
+            border-top: 1px solid #162040;
+            font-size: 12px;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== AURORA BACKGROUND EMOJIS ===== -->
+    <span class="bg-emoji gold" style="top:5%;left:3%;animation-delay:0s;">🎸</span>
+    <span class="bg-emoji green" style="top:12%;right:5%;animation-delay:2s;">🎵</span>
+    <span class="bg-emoji cyan" style="top:25%;left:8%;animation-delay:4s;">🎧</span>
+    <span class="bg-emoji yellow" style="top:35%;right:12%;animation-delay:1s;">🥁</span>
+    <span class="bg-emoji gold" style="top:48%;left:4%;animation-delay:3s;">🎼</span>
+    <span class="bg-emoji green" style="top:55%;right:7%;animation-delay:5s;">🎹</span>
+    <span class="bg-emoji cyan" style="top:68%;left:10%;animation-delay:6s;">🎷</span>
+    <span class="bg-emoji yellow" style="top:75%;right:4%;animation-delay:0s;">🎤</span>
+    <span class="bg-emoji gold" style="top:85%;left:6%;animation-delay:2s;">🎻</span>
+    <span class="bg-emoji green" style="top:8%;left:20%;animation-delay:7s;">🎺</span>
+    <span class="bg-emoji cyan" style="top:40%;right:20%;animation-delay:3s;">🪇</span>
+    <span class="bg-emoji yellow" style="top:60%;left:15%;animation-delay:5s;">🎶</span>
+    <span class="bg-emoji gold" style="top:90%;right:15%;animation-delay:1s;">💿</span>
+    <span class="bg-emoji green" style="top:18%;right:28%;animation-delay:4s;">🎚️</span>
+    <span class="bg-emoji cyan" style="top:72%;left:22%;animation-delay:6s;">🎛️</span>
+       <header>
+        <!-- Floating background emojis -->
+        <span class="header-bg-emoji" style="top:10%;left:5%;animation-delay:0s;font-size:50px;">🎵</span>
+        <span class="header-bg-emoji" style="top:40%;left:15%;animation-delay:2s;font-size:35px;">🎸</span>
+        <span class="header-bg-emoji" style="top:15%;right:8%;animation-delay:4s;font-size:45px;">🎧</span>
+        <span class="header-bg-emoji" style="top:50%;right:18%;animation-delay:6s;font-size:30px;">🥁</span>
+        <span class="header-bg-emoji" style="top:30%;left:25%;animation-delay:1s;font-size:38px;">🎼</span>
+        <span class="header-bg-emoji" style="top:20%;right:25%;animation-delay:3s;font-size:42px;">🎹</span>
+        <span class="header-bg-emoji" style="top:55%;left:10%;animation-delay:5s;font-size:32px;">🎷</span>
+        <span class="header-bg-emoji" style="top:45%;right:10%;animation-delay:7s;font-size:36px;">🎤</span>
+
+        <div class="header-top">
+            <div class="header-center">
+                <a href="/">
+                    <h1>🎸 Guitar Practice Hub</h1>
+                </a>
+                <p>YOUR JOURNEY · MASTER THE GUITAR</p>
+            </div>
+
+            <div class="account-area" id="accountArea">
+                <div class="account-icon" id="accountIcon" onclick="toggleAccountDropdown()">👤</div>
+                <div class="account-nickname" id="accountNickname">Guest</div>
+                <div class="account-dropdown" id="accountDropdown">
+                    <a href="/login" id="ddLogin">🔐 Login</a>
+                    <a href="/signup" id="ddSignup">📝 Sign Up</a>
+                    <a href="/logout" id="ddLogout" style="display:none;">🚪 Logout</a>
+                    <div class="divider"></div>
+                    <div style="color:#7ec8e3; font-size:11px; padding:5px 15px;">Change Icon:</div>
+                    <div class="icon-picker" id="iconPicker">
+                        <span class="icon-option" data-icon="🎸">🎸</span>
+                        <span class="icon-option" data-icon="🎵">🎵</span>
+                        <span class="icon-option" data-icon="🎧">🎧</span>
+                        <span class="icon-option" data-icon="⭐">⭐</span>
+                        <span class="icon-option" data-icon="🔥">🔥</span>
+                        <span class="icon-option" data-icon="💀">💀</span>
+                        <span class="icon-option" data-icon="🐱">🐱</span>
+                        <span class="icon-option" data-icon="👤">👤</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+                       <div class="equalizer-wrapper">
+            <div class="equalizer">
+                <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+                <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+                <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+                <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+                <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+            </div>
+        </div>
+    </header>
+
+    <div class="side-menu" id="sideMenu">
+        <button class="menu-tab" onclick="toggleMenu()">M<br>E<br>N<br>U</button>
+        <div class="menu-content">
+            <a href="/" class="active" id="homeLink">🏠 Home</a>
+            <a href="/practice" id="practiceLink">🎯 Practice List</a>
+            <a href="/login" id="loginLink">🔐 Login</a>
+            <a href="/signup" id="signupLink">📝 Sign Up</a>
+            <a href="/admin" id="adminLink" style="display:none;">🔧 Admin Panel</a>
+            <a href="/logout" id="logoutLink" style="display:none;">🚪 Logout</a>
+        </div>
+    </div>
+
+    <!-- ===== MAIN LAYOUT ===== -->
+    <div class="main-wrapper">
+
+        <!-- LEFT PANEL -->
+        <aside class="left-panel">
+            <div class="panel-label">◈ Side A ◈</div>
+        </aside>
+
+        <!-- CENTER PANEL -->
+        <main class="center-panel">
+            <div class="section">
+                <h2>🟢 BEGINNER</h2>
+                <div class="song-grid" id="beginnerGrid"></div>
+            </div>
+            <div class="section">
+                <h2>🟡 INTERMEDIATE</h2>
+                <div class="song-grid" id="intermediateGrid"></div>
+            </div>
+            <div class="section">
+                <h2>🔴 ADVANCED</h2>
+                <div class="song-grid" id="advancedGrid"></div>
+            </div>
+        </main>
+
+        <!-- RIGHT PANEL -->
+        <aside class="right-panel">
+            <div class="panel-label">◈ Side B ◈</div>
+        </aside>
+
+    </div>
+
+    <footer>
+        <p>🌌 GUITAR PRACTICE HUB &copy; 2025 — AURORA EDITION</p>
+    </footer>
+
+    <script>
+        function toggleAccountDropdown() {
+            document.getElementById("accountDropdown").classList.toggle("show");
+        }
+
+        document.addEventListener("click", function(e) {
+            const area = document.getElementById("accountArea");
+            if (!area.contains(e.target)) {
+                document.getElementById("accountDropdown").classList.remove("show");
+            }
+        });
+
+        document.getElementById("iconPicker").addEventListener("click", function(e) {
+            if (e.target.classList.contains("icon-option")) {
+                const icon = e.target.getAttribute("data-icon");
+                document.getElementById("accountIcon").textContent = icon;
+                localStorage.setItem("userIcon", icon);
+                document.querySelectorAll(".icon-option").forEach(el => el.classList.remove("selected"));
+                e.target.classList.add("selected");
+            }
+        });
+
+        const savedIcon = localStorage.getItem("userIcon");
+        if (savedIcon) {
+            document.getElementById("accountIcon").textContent = savedIcon;
+            document.querySelectorAll(".icon-option").forEach(el => {
+                if (el.getAttribute("data-icon") === savedIcon) el.classList.add("selected");
+            });
+        }
+
+        function toggleMenu() {
+            document.getElementById("sideMenu").classList.toggle("open");
+        }
+
+        document.addEventListener("click", function(e) {
+            const menu = document.getElementById("sideMenu");
+            const tab = document.querySelector(".menu-tab");
+            if (!menu.contains(e.target) && !tab.contains(e.target)) {
+                menu.classList.remove("open");
+            }
+        });
+
+        const chordDiagrams = {
+            "G": { name: "G Major", diagram: `E A D G B e\n╒═╤═╤═╕\n│ │ │ │ │ 3│\n├─┼─┼─┼─┼─┤\n│ 2│ │ │ │ │\n├─┼─┼─┼─┼─┤\n│ │ 1│ 1│ 1│\n└─┴─┴─┴─┴─┘` },
+            "D": { name: "D Major", diagram: `E A D G B e\n╒═╤═╤═╕\n│ │ │ │ 1│ 1│\n├─┼─┼─┼─┼─┤\n│ │ │ 2│ 2│\n├─┼─┼─┼─┼─┤\n│ │ 3│ │ │ │\n└─┴─┴─┴─┴─┘` },
+            "Am": { name: "A Minor", diagram: `E A D G B e\n╒═╤═╤═╕\n│ │ │ │ 1│ │\n├─┼─┼─┼─┼─┤\n│ │ 2│ 2│ │\n├─┼─┼─┼─┼─┤\n│ │ 3│ │ │ │\n└─┴─┴─┴─┴─┘` },
+            "C": { name: "C Major", diagram: `E A D G B e\n╒═╤═╤═╕\n│ │ │ │ 1│ │\n├─┼─┼─┼─┼─┤\n│ │ 2│ │ │ │\n├─┼─┼─┼─┼─┤\n│ 3│ │ │ │ │\n└─┴─┴─┴─┴─┘` },
+            "Em": { name: "E Minor", diagram: `E A D G B e\n╒═╤═╤═╕\n│ │ │ │ │ │\n├─┼─┼─┼─┼─┤\n│ 2│ 2│ │ │\n├─┼─┼─┼─┼─┤\n│ │ │ │ │ │\n└─┴─┴─┴─┴─┘` },
+            "E": { name: "E Major", diagram: `E A D G B e\n╒═╤═╤═╕\n│ │ │ │ │ │\n├─┼─┼─┼─┼─┤\n│ 2│ 2│ │ │\n├─┼─┼─┼─┼─┤\n│ 1│ │ │ │ │\n└─┴─┴─┴─┴─┘` },
+            "A": { name: "A Major", diagram: `E A D G B e\n╒═╤═╤═╕\n│ │ │ │ │ │\n├─┼─┼─┼─┼─┤\n│ │ 1│ 1│ 1│\n├─┼─┼─┼─┼─┤\n│ 2│ 2│ 2│ │\n└─┴─┴─┴─┴─┘` },
+            "F": { name: "F Major (Barre)", diagram: `E A D G B e\n╒═╤═╤═╕\n│ 1│ 1│ 1│ 1│ 1│\n├─┼─┼─┼─┼─┤\n│ │ 3│ 3│ 3│\n├─┼─┼─┼─┼─┤\n│ 2│ 2│ 2│ │\n└─┴─┴─┴─┴─┘` },
+            "Dm": { name: "D Minor", diagram: `E A D G B e\n╒═╤═╤═╕\n│ │ │ │ 1│ 1│\n├─┼─┼─┼─┼─┤\n│ │ 3│ │ 3│\n├─┼─┼─┼─┼─┤\n│ │ 2│ │ │ │\n└─┴─┴─┴─┴─┘` },
+            "D6/F#": { name: "D6/F#", diagram: `E A D G B e\n╒═╤═╤═╕\n│ │ │ │ 2│ │\n├─┼─┼─┼─┼─┤\n│ │ │ 1│ │ 1│\n├─┼─┼─┼─┼─┤\n│ 3│ │ │ │ │\n└─┴─┴─┴─┴─┘` }
+        };
+
+        const defaultSongs = {
+            beginner: [
+                { name: "Knockin' on Heaven's Door", artist: "Bob Dylan", chords: ["G", "D", "Am", "C"] },
+                { name: "Horse with No Name", artist: "America", chords: ["Em", "D6/F#"] }
+            ],
+            intermediate: [
+                { name: "Wonderwall", artist: "Oasis", chords: ["Em", "G", "D", "A", "C"] },
+                { name: "Hotel California", artist: "Eagles", chords: ["Am", "E", "G", "D", "F"] }
+            ],
+            advanced: [
+                { name: "Stairway to Heaven", artist: "Led Zeppelin", chords: ["Am", "C", "G", "F", "Dm"] },
+                { name: "Classical Gas", artist: "Mason Williams", chords: ["Am", "G", "F", "E"] }
+            ]
+        };
+
+        let songs = { beginner: [], intermediate: [], advanced: [] };
+        let learnedSongs = [];
+        let practicingSongs = [];
+
+        function init() {
+            fetch("/api/check_admin")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.is_admin) document.getElementById("adminLink").style.display = "block";
+                    if (data.is_logged_in) {
+                        document.getElementById("logoutLink").style.display = "block";
+                        document.getElementById("loginLink").style.display = "none";
+                        document.getElementById("signupLink").style.display = "none";
+                        document.getElementById("ddLogout").style.display = "block";
+                        document.getElementById("ddLogin").style.display = "none";
+                        document.getElementById("ddSignup").style.display = "none";
+                        document.getElementById("accountNickname").textContent = data.username || "User";
+                        return fetch("/api/progress").then(res => res.json());
+                    } else {
+                        return {
+                            learned: JSON.parse(localStorage.getItem("learnedSongs") || "[]"),
+                            practicing: JSON.parse(localStorage.getItem("practicingSongs") || "[]")
+                        };
+                    }
+                })
+                .then(progress => {
+                    learnedSongs = progress.learned || [];
+                    practicingSongs = progress.practicing || [];
+                    return fetch("/api/songs");
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.beginner.length === 0 && data.intermediate.length === 0 && data.advanced.length === 0) {
+                        songs = defaultSongs;
+                    } else {
+                        songs = data;
+                    }
+                    renderSongs();
+                })
+                .catch(() => {
+                    songs = defaultSongs;
+                    learnedSongs = JSON.parse(localStorage.getItem("learnedSongs") || "[]");
+                    practicingSongs = JSON.parse(localStorage.getItem("practicingSongs") || "[]");
+                    renderSongs();
+                });
+        }
+
+        function renderSongs() {
+            renderSection("beginner", songs.beginner);
+            renderSection("intermediate", songs.intermediate);
+            renderSection("advanced", songs.advanced);
+        }
+
+        function renderSection(level, songList) {
+            const grid = document.getElementById(level + "Grid");
+            grid.innerHTML = "";
+            if (!songList) return;
+            songList.forEach(song => {
+                const isLearned = learnedSongs.includes(song.name);
+                const isPracticing = practicingSongs.some(s => s.name === song.name);
+                const card = document.createElement("div");
+                card.className = "song-card" + (isLearned ? " learned-card" : "");
+                let chordTags = "";
+                song.chords.forEach(chord => {
+                    const diagram = chordDiagrams[chord];
+                    if (diagram) {
+                        chordTags += `<span class="chord-tag">${chord}<div class="chord-tooltip"><div class="chord-name-tip">${diagram.name}</div><div class="chord-diagram">${diagram.diagram.replace(/\n/g, "<br>")}</div></div></span>`;
+                    } else {
+                        chordTags += `<span class="chord-tag">${chord}</span>`;
+                    }
+                });
+                card.innerHTML = `
+                    <h3>${song.name}</h3>
+                    <p class="artist">${song.artist}</p>
+                    <div class="chords">${chordTags}</div>
+                    <div class="btn-group">
+                        <button class="learn-btn ${isLearned ? 'learned' : ''}" onclick="toggleLearned(this, '${song.name.replace(/'/g, "\\'")}')">${isLearned ? '✅ Learned!' : '✅ Learned'}</button>
+                        <button class="practice-btn ${isPracticing ? 'active' : ''}" onclick="togglePractice(this, '${song.name.replace(/'/g, "\\'")}', '${song.artist.replace(/'/g, "\\'")}')">${isPracticing ? '🎯 Practicing!' : '🎯 Practice'}</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function toggleLearned(btn, songName) {
+            if (btn.classList.contains("learned")) {
+                btn.classList.remove("learned"); btn.textContent = "✅ Learned";
+                btn.closest(".song-card").classList.remove("learned-card");
+                learnedSongs = learnedSongs.filter(s => s !== songName);
+            } else {
+                btn.classList.add("learned"); btn.textContent = "✅ Learned!";
+                btn.closest(".song-card").classList.add("learned-card");
+                if (!learnedSongs.includes(songName)) learnedSongs.push(songName);
+            }
+            saveAllProgress();
+        }
+
+        function togglePractice(btn, songName, artist) {
+            if (btn.classList.contains("active")) {
+                btn.classList.remove("active"); btn.textContent = "🎯 Practice";
+                practicingSongs = practicingSongs.filter(s => s.name !== songName);
+            } else {
+                btn.classList.add("active"); btn.textContent = "🎯 Practicing!";
+                if (!practicingSongs.some(s => s.name === songName)) practicingSongs.push({ name: songName, artist: artist });
+            }
+            saveAllProgress();
+        }
+
+        function saveAllProgress() {
+            localStorage.setItem("learnedSongs", JSON.stringify(learnedSongs));
+            localStorage.setItem("practicingSongs", JSON.stringify(practicingSongs));
+            fetch("/api/progress", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ learned: learnedSongs, practicing: practicingSongs })
+            }).catch(() => {});
+        }
+
+        init();
+    </script>
+</body>
+</html>

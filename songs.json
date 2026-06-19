@@ -1,0 +1,24 @@
+{
+    "beginner": [],
+    "intermediate": [
+        {
+            "name": "Another Love",
+            "artist": "Tom Odell",
+            "chords": [
+                "Em",
+                "G",
+                "C",
+                "Em",
+                "Bm",
+                "C",
+                "Em",
+                "Am",
+                "Em",
+                "Bm",
+                "C",
+                "C"
+            ]
+        }
+    ],
+    "advanced": []
+}

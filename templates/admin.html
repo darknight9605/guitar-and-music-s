@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎧 DJ Booth - Studio Control</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #06060f;
+            color: #d0d0e8;
+            background-image:
+                radial-gradient(ellipse at 20% 50%, rgba(0,180,216,0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(180,77,255,0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(255,107,157,0.03) 0%, transparent 50%);
+        }
+
+        /* ===== RGB ANIMATIONS ===== */
+        @keyframes rgbBorder {
+            0% { border-color: #00b4d8; }
+            25% { border-color: #00e5ff; }
+            50% { border-color: #b44dff; }
+            75% { border-color: #ff6b9d; }
+            100% { border-color: #00b4d8; }
+        }
+
+        @keyframes rgbGlow {
+            0% { box-shadow: 0 0 15px rgba(0,180,216,0.4), 0 0 30px rgba(0,180,216,0.1); }
+            33% { box-shadow: 0 0 15px rgba(180,77,255,0.4), 0 0 30px rgba(180,77,255,0.1); }
+            66% { box-shadow: 0 0 15px rgba(255,107,157,0.4), 0 0 30px rgba(255,107,157,0.1); }
+            100% { box-shadow: 0 0 15px rgba(0,180,216,0.4), 0 0 30px rgba(0,180,216,0.1); }
+        }
+
+        @keyframes rgbText {
+            0% { color: #00b4d8; }
+            33% { color: #b44dff; }
+            66% { color: #ff6b9d; }
+            100% { color: #00b4d8; }
+        }
+        @keyframes equalizer {
+            0%, 100% { transform: scaleY(0.4); opacity: 0.6; }
+            30% { transform: scaleY(1.2); opacity: 1; }
+            60% { transform: scaleY(0.7); opacity: 0.8; }
+        }
+
+        header {
+            background: linear-gradient(180deg, #0a0a20, #0f0f28);
+            padding: 25px 30px;
+            text-align: center;
+            border-bottom: 1px solid #1a1a3e;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #00b4d8, #b44dff, #ff6b9d, #b44dff, #00b4d8);
+            animation: rgbBorder 3s linear infinite;
+        }
+
+        header h1 {
+            font-size: 32px;
+            animation: rgbText 4s ease-in-out infinite;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            color: #6666aa;
+            margin-top: 5px;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        /* ===== EQUALIZER BARS ===== */
+        .equalizer {
+            display: flex;
+            gap: 3px;
+            justify-content: center;
+            align-items: flex-end;
+            height: 20px;
+            margin-top: 10px;
+        }
+
+        .eq-bar {
+            width: 4px;
+            background: linear-gradient(180deg, #00b4d8, #b44dff);
+            border-radius: 2px;
+            animation: equalizer 0.8s ease-in-out infinite;
+        }
+
+        .eq-bar:nth-child(1) { animation-delay: 0s; }
+        .eq-bar:nth-child(2) { animation-delay: 0.1s; }
+        .eq-bar:nth-child(3) { animation-delay: 0.2s; }
+        .eq-bar:nth-child(4) { animation-delay: 0.3s; }
+        .eq-bar:nth-child(5) { animation-delay: 0.4s; }
+        .eq-bar:nth-child(6) { animation-delay: 0.5s; }
+        .eq-bar:nth-child(7) { animation-delay: 0.6s; }
+        .eq-bar:nth-child(8) { animation-delay: 0.7s; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 30px; }
+
+        .form-section {
+            background: #0d0d22;
+            border: 2px solid #1a1a3e;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            transition: 0.5s;
+        }
+
+        .form-section:hover {
+            animation: rgbBorder 4s linear infinite, rgbGlow 4s linear infinite;
+        }
+
+        .form-section h2 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        label {
+            display: block;
+            color: #8888bb;
+            margin-bottom: 6px;
+            font-weight: bold;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 2px solid #1a1a3e;
+            background-color: #08081a;
+            color: #e0e0f0;
+            font-size: 15px;
+            font-family: inherit;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            animation: rgbBorder 4s linear infinite;
+        }
+
+        .hint { color: #5555aa; font-size: 11px; margin-top: 5px; }
+
+        .btn {
+            background: linear-gradient(135deg, #00b4d8, #b44dff);
+            color: #fff;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #b44dff, #ff6b9d);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(180,77,255,0.3);
+        }
+
+        .btn-delete {
+            background: transparent;
+            color: #ff6b9d;
+            border: 1px solid #ff6b9d;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            text-decoration: none;
+            transition: 0.3s;
+            letter-spacing: 1px;
+        }
+
+        .btn-delete:hover {
+            background: #ff6b9d;
+            color: #06060f;
+            box-shadow: 0 0 15px rgba(255,107,157,0.3);
+        }
+
+        .current-songs { margin-top: 20px; }
+
+        .current-songs h2 {
+            color: #fff;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 18px;
+        }
+
+        .difficulty-section { margin-bottom: 30px; }
+
+        .difficulty-section h3 {
+            color: #aaaadd;
+            border-bottom: 1px solid #1a1a3e;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .song-list { display: flex; flex-direction: column; gap: 10px; }
+
+        .song-item {
+            background: #0d0d22;
+            padding: 15px 18px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #1a1a3e;
+            transition: 0.3s;
+        }
+
+        .song-item:hover {
+            border-color: #b44dff;
+            box-shadow: 0 0 15px rgba(180,77,255,0.15);
+        }
+
+        .song-item .song-name { color: #fff; font-weight: bold; font-size: 15px; }
+        .song-item .song-artist { color: #7777bb; font-size: 12px; }
+        .song-item .song-chords { color: #5555aa; font-size: 11px; margin-top: 3px; }
+
+        /* ===== DJ BOOTH SIDE MENU ===== */
+        .dj-menu {
+            position: fixed;
+            right: -230px;
+            top: 0;
+            width: 230px;
+            height: 100%;
+            background: #08081f;
+            border-left: 2px solid #1a1a3e;
+            padding-top: 20px;
+            transition: 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 100;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.5);
+        }
+
+        .dj-menu.open { right: 0; }
+
+        .dj-menu .dj-tab {
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #0d0d22;
+            color: #fff;
+            padding: 12px 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 9px;
+            letter-spacing: 2px;
+            border: 2px solid #1a1a3e;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+            transition: 0.3s;
+            writing-mode: horizontal-tb;
+            width: 38px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 1.4;
+            animation: rgbGlow 3s ease-in-out infinite;
+        }
+
+        .dj-menu .dj-tab:hover {
+            background: #12122a;
+            animation: rgbBorder 2s linear infinite;
+        }
+
+        .dj-menu .dj-content { padding-top: 30px; }
+
+        .dj-menu .dj-header {
+            text-align: center;
+            padding: 15px;
+            border-bottom: 1px solid #1a1a3e;
+            margin-bottom: 10px;
+        }
+
+        .dj-menu .dj-header .dj-badge {
+            background: linear-gradient(135deg, #00b4d8, #b44dff);
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            display: inline-block;
+        }
+
+        .dj-menu .dj-content a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #8888bb;
+            text-decoration: none;
+            padding: 12px 20px;
+            font-size: 13px;
+            transition: 0.3s;
+            border-left: 3px solid transparent;
+            letter-spacing: 1px;
+        }
+
+        .dj-menu .dj-content a:hover {
+            background: rgba(255,255,255,0.03);
+            color: #fff;
+            border-left: 3px solid #b44dff;
+            padding-left: 25px;
+        }
+
+        .dj-menu .dj-content a.active {
+            background: rgba(180,77,255,0.1);
+            color: #fff;
+            border-left: 3px solid #b44dff;
+            font-weight: bold;
+        }
+
+        .dj-menu .dj-footer {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: #5555aa;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        footer {
+            background: #0a0a20;
+            color: #5555aa;
+            text-align: center;
+            padding: 15px;
+            border-top: 1px solid #1a1a3e;
+            margin-top: 40px;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🎧 DJ BOOTH</h1>
+        <p>STUDIO CONTROL PANEL</p>
+        <div class="equalizer">
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+        </div>
+    </header>
+
+    <!-- ===== DJ SIDE MENU ===== -->
+    <div class="dj-menu" id="djMenu">
+        <button class="dj-tab" onclick="toggleDjMenu()">D<br>J<br><br>B<br>O<br>O<br>T<br>H</button>
+        <div class="dj-content">
+            <div class="dj-header">
+                <span class="dj-badge">🎛️ DJ BOOTH</span>
+            </div>
+            <a href="/">
+                <span>🏠</span> Home
+            </a>
+            <a href="/practice">
+                <span>🎯</span> Practice List
+            </a>
+            <a href="/admin" class="active">
+                <span>➕</span> Add Tracks
+            </a>
+            <a href="/logout">
+                <span>🚪</span> Sign Out
+            </a>
+        </div>
+        <div class="dj-footer">MIDNIGHT SESSION</div>
+    </div>
+
+    <div class="container">
+        <div class="form-section">
+            <h2>➕ Add New Track</h2>
+            <form method="POST" action="/admin">
+                <div class="form-group">
+                    <label>Track Name</label>
+                    <input type="text" name="name" placeholder="e.g. Nothing Else Matters" required>
+                </div>
+                <div class="form-group">
+                    <label>Artist</label>
+                    <input type="text" name="artist" placeholder="e.g. Metallica" required>
+                </div>
+                <div class="form-group">
+                    <label>Difficulty</label>
+                    <select name="difficulty" required>
+                        <option value="beginner">🟢 Beginner</option>
+                        <option value="intermediate">🟡 Intermediate</option>
+                        <option value="advanced">🔴 Advanced</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Chords (comma separated)</label>
+                    <input type="text" name="chords" placeholder="e.g. Am, C, G, Em, D" required>
+                    <div class="hint">Separate chords with commas</div>
+                </div>
+                <button type="submit" class="btn">🎵 Drop The Track</button>
+            </form>
+        </div>
+
+        <div class="current-songs">
+            <h2>📀 Track Library</h2>
+
+            {% for difficulty, song_list in songs.items() %}
+            <div class="difficulty-section">
+                <h3>
+                    {% if difficulty == 'beginner' %}🟢 Beginner
+                    {% elif difficulty == 'intermediate' %}🟡 Intermediate
+                    {% else %}🔴 Advanced
+                    {% endif %}
+                    — {{ song_list|length }} tracks
+                </h3>
+                <div class="song-list">
+                    {% for song in song_list %}
+                    <div class="song-item">
+                        <div>
+                            <div class="song-name">{{ song.name }}</div>
+                            <div class="song-artist">{{ song.artist }}</div>
+                            <div class="song-chords">🎸 {{ song.chords|join(', ') }}</div>
+                        </div>
+                        <a href="/admin/delete/{{ difficulty }}/{{ song.name }}" class="btn-delete" onclick="return confirm('Delete {{ song.name }}?')">🗑️ Remove</a>
+                    </div>
+                    {% endfor %}
+                    {% if song_list|length == 0 %}
+                    <p style="color:#5555aa; font-style:italic; padding:10px;">No tracks yet — drop one above!</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <footer>
+        <p>🌙 MIDNIGHT SESSION &copy; 2025 — DJ BOOTH</p>
+    </footer>
+
+    <script>
+        function toggleDjMenu() {
+            document.getElementById("djMenu").classList.toggle("open");
+        }
+
+        document.addEventListener("click", function(e) {
+            const menu = document.getElementById("djMenu");
+            const tab = document.querySelector(".dj-tab");
+            if (!menu.contains(e.target) && !tab.contains(e.target)) {
+                menu.classList.remove("open");
+            }
+        });
+    </script>
+
+</body>
+</html>
